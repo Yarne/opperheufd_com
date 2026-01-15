@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Opperheufd</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="site-header"></div>
+
+    <main>
+      <section>
+        <h2>Pages</h2>
+        <div class="cards" id="cards"></div>
+        <template id="card-template">
+          <article class="card">
+            <h3 class="card-title"></h3>
+            <p class="card-description"></p>
+          </article>
+        </template>
+      </section>
+    </main>
+
+    <div id="site-footer"></div>
+    <script>
+      async function loadPartial(targetId, path) {
+        const response = await fetch(path);
+        if (!response.ok) {
+          return;
+        }
+        const html = await response.text();
+        document.getElementById(targetId).innerHTML = html;
+      }
+
+      function buildCard(item, template) {
+        const card = template.content.cloneNode(true);
+        const title = card.querySelector(".card-title");
+        const description = card.querySelector(".card-description");
+
+        if (item.href) {
+          const link = document.createElement("a");
+          link.href = item.href;
+          link.textContent = item.title;
+          title.append(link);
+        } else {
+          title.textContent = item.title;
+        }
+
+        description.textContent = item.description;
+        return card;
+      }
+
+      function renderCards(items) {
+        const container = document.getElementById("cards");
+        const template = document.getElementById("card-template");
+        const fragment = document.createDocumentFragment();
+
+        items.forEach((item) => {
+          fragment.append(buildCard(item, template));
+        });
+
+        container.append(fragment);
+      }
+
+      async function loadCards(path) {
+        const response = await fetch(path);
+        if (!response.ok) {
+          return [];
+        }
+        return response.json();
+      }
+
+      loadPartial("site-header", "header.txt");
+      loadPartial("site-footer", "footer.txt");
+
+      loadCards("cards.json").then(renderCards);
+    </script>
+  </body>
+</html>
