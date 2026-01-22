@@ -28,7 +28,7 @@ opperheufd_com/
 │       ├── site/               # Static website
 │       │   ├── index.html
 │       │   └── README.md
-│       ├── apps/               # Flask applications
+│       ├── apps/               # Node.js / Express (TypeScript) applications
 │       │   └── minecraft_join_app/
 │       ├── README.md
 │       └── DEPLOYMENT.md
@@ -135,10 +135,11 @@ For each module:
    - Point document root to `modules/<name>/site/`
    - Ensure `shared/` directory is accessible (symlink or shared hosting)
 
-2. **Flask App Module**
-   - Create Python app in cPanel
-   - Set application root to `modules/<name>/apps/<app-name>/`
-   - Set startup file to `passenger_wsgi.py`
+2. **Node.js / Express App Module**
+  - Create Node.js application in cPanel (or use your Node hosting)
+  - Set application root to `modules/<name>/apps/<app-name>/`
+  - Set startup file to the compiled entry (e.g. `app.js`) or use the provided startup command
+  - Install dependencies with `npm install` and run `npm run build` if needed
 
 See individual module `DEPLOYMENT.md` files for specific instructions.
 
@@ -162,7 +163,7 @@ See individual module `DEPLOYMENT.md` files for specific instructions.
 - Card components in `shared/scripts/cards.js`
 - Minecraft module could display cards for servers/stats
 
-**Message States** - Used by Flask apps
+**Message States** - Used by server-side apps
 - `.error`, `.success` styles in `shared/styles/components.css`
 - Can be used consistently across all modules
 
@@ -221,8 +222,8 @@ shared/
 1. ✅ Create shared components library
 2. ✅ Create hub module
 3. ✅ Create minecraft module structure
-4. 📋 Move Flask app to `modules/mc/apps/`
-5. 📋 Update Flask app to use shared components in templates
+4. 📋 Move application to `modules/mc/apps/`
+5. 📋 Update the app to use shared components in templates
 6. 📋 Test all modules locally
 7. 📋 Deploy to subdomains on cPanel
 8. ✅ Remove old `site/` directory (completed)

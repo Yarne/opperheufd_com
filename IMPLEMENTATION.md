@@ -54,8 +54,8 @@
 - `index.html` - Minecraft server info page
 - `README.md` - Site documentation
 
-**Backend:** `modules/mc/apps/minecraft_join_app/`
-- Original Flask app location (can stay or move here)
+- **Backend:** `modules/mc/apps/minecraft_join_app/`
+- Node.js/Express (TypeScript) app location (can stay or move here)
 - RCON integration
 - Subscription management
 - Admin panel
@@ -221,7 +221,7 @@ python3 -m http.server 8000
 
 ### Phase 3: Extract First Utility 🟡
 - [ ] Create `shared/scripts/validation.js`
-- [ ] Extract form validation from Flask app
+- [ ] Extract form validation from application source (`apps/minecraft_join_app/src/`)
 - [ ] Test in minecraft module
 - [ ] Document in shared/README.md
 
@@ -236,7 +236,7 @@ python3 -m http.server 8000
 ### Phase 5: Production Deployment 🚀
 - [ ] Deploy hub to opperheufd.com
 - [ ] Deploy minecraft site to mc.opperheufd.com
-- [ ] Deploy Flask app to mc.opperheufd.com
+- [ ] Deploy Node.js/Express app to mc.opperheufd.com
 - [ ] Verify all functionality
 - [ ] Monitor for issues
 

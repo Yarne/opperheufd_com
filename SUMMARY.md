@@ -45,7 +45,7 @@ Transform the site from a flat structure to a **modular hub with independent pro
 ### 3. Minecraft Module (`modules/mc/`)
 - Restructured for separate deployment to mc.opperheufd.com
 - Static site: info page
-- Backend: Flask whitelist app (unchanged functionality)
+- Backend: Node.js/Express (TypeScript) whitelist app (unchanged functionality)
 - Module documentation for future reference
 
 **Impact:** Minecraft isolated, can evolve independently

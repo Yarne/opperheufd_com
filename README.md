@@ -24,7 +24,7 @@ modules/                         ← Independent projects
 ├── hub/                         ← Main landing (opperheufd.com)
 └── mc/                          ← Minecraft (mc.opperheufd.com)
     ├── site/                    ← Static pages
-    └── apps/minecraft_join_app/ ← Flask whitelist app
+   └── apps/minecraft_join_app/ ← Node.js/Express (TypeScript) whitelist app
 
 [OLD] site/, apps/              ← Legacy (can be removed after testing)
 ```
@@ -65,7 +65,7 @@ python3 -m http.server 8000
 
 2. **Minecraft (mc.opperheufd.com)**
    - Static site: document root to `modules/mc/site/`
-   - Flask app: Python app at `modules/mc/apps/minecraft_join_app/`
+   - Node.js app: Node.js/Express app at `modules/mc/apps/minecraft_join_app/`
 
 See [MIGRATION.md](MIGRATION.md#step-4-cpanel-configuration) for details.
 

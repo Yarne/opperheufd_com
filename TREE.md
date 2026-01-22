@@ -42,14 +42,15 @@ opperheufd_com/
 │       │   └── README.md       ← Site documentation
 │       │
 │       ├── apps/               ← Backend applications
-│       │   └── minecraft_join_app/   ← Flask whitelist app
-│       │       ├── app.py
-│       │       ├── templates/
+│       │   └── minecraft_join_app/   ← Node.js/Express (TypeScript) app
+│       │       ├── src/                 # TypeScript source
+│       │       ├── dist/                # Compiled JS (output)
+│       │       ├── templates/           # EJS templates
 │       │       ├── subscriptions.json
 │       │       ├── admin_log.json
-│       │       ├── passenger_wsgi.py
-│       │       ├── requirements.txt
-│       │       └── ...
+│       │       ├── package.json
+│       │       ├── tsconfig.json
+│       │       └── app.js               # compiled startup entry
 │       │
 │       ├── README.md           ← Module overview
 │       └── DEPLOYMENT.md       ← Deployment instructions
@@ -122,14 +123,14 @@ Located at `modules/mc/` - serves mc.opperheufd.com
 | `site/index.html` | Minecraft server info page |
 | `site/README.md` | Site documentation |
 
-#### Flask App
+#### Server App (Node.js/Express)
 | File | Purpose |
 |------|---------|
-| `apps/minecraft_join_app/app.py` | Main Flask application |
-| `apps/minecraft_join_app/templates/` | HTML templates |
+| `apps/minecraft_join_app/src/app.ts` | Main Express application |
+| `apps/minecraft_join_app/templates/` | Server templates (EJS) |
 | `apps/minecraft_join_app/subscriptions.json` | Subscription data |
 | `apps/minecraft_join_app/admin_log.json` | Audit log |
-| `apps/minecraft_join_app/passenger_wsgi.py` | WSGI entry point |
+| `apps/minecraft_join_app/package.json` | Node.js dependencies and scripts |
 
 #### Module Docs
 | File | Purpose |
@@ -153,7 +154,7 @@ Located at `modules/mc/` - serves mc.opperheufd.com
 <script src="../../../shared/scripts/partials.js"></script>
 ```
 
-### In Flask Templates (deployed with absolute paths)
+### In Server Templates (deployed with absolute paths)
 ```html
 <!-- Shared resources (absolute path) -->
 <link rel="stylesheet" href="/shared/styles/base.css" />
@@ -200,7 +201,7 @@ Then document in `shared/README.md` and add to relevant sections of this file.
 ### Phase 3: Deployment
 - [ ] Deploy hub to opperheufd.com
 - [ ] Deploy minecraft site to mc.opperheufd.com
-- [ ] Deploy Flask app to mc.opperheufd.com
+- [ ] Deploy Node.js/Express app to mc.opperheufd.com
 - [ ] Verify everything works
 
 ### Phase 4: Cleanup

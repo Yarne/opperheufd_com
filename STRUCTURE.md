@@ -46,9 +46,10 @@ modules/mc/                    mc.opperheufd.com
 │   └── README.md
 ├── apps/
 │   └── minecraft_join_app/
-│       ├── app.py
+│       ├── src/
+│       ├── dist/
 │       ├── templates/
-│       └── [flask files]
+│       └── package.json
 └── README.md
 
 ARCHITECTURE.md              ← Technical guide
@@ -74,11 +75,11 @@ README.md                  ← Quick start
 
 | Utility | Current Location | Candidates |
 |---------|------------------|-----------|
-| Form Validation | `apps/minecraft_join_app/app.py` | Minecraft + future forms |
+| Form Validation | `apps/minecraft_join_app/src/app.ts` | Minecraft + future forms |
 | Message Display | `shared/styles/components.css` | All modules |
-| Date Handling | `apps/minecraft_join_app/app.py` | Minecraft + time-based features |
-| Discord Auth | `apps/minecraft_join_app/app.py` | Minecraft + future auth needs |
-| API Responses | `apps/minecraft_join_app/app.py` | Any API endpoints |
+| Date Handling | `apps/minecraft_join_app/src/app.ts` | Minecraft + time-based features |
+| Discord Auth | `apps/minecraft_join_app/src/app.ts` | Minecraft + future auth needs |
+| API Responses | `apps/minecraft_join_app/src/app.ts` | Any API endpoints |
 
 ## Benefits
 
@@ -117,7 +118,7 @@ README.md                  ← Quick start
 ### Phase 3: 🚀 Deployment
 - [ ] Deploy hub to opperheufd.com
 - [ ] Deploy minecraft site to mc.opperheufd.com  
-- [ ] Deploy Flask app to mc.opperheufd.com
+- [ ] Deploy Node.js/Express app to mc.opperheufd.com
 - [ ] Verify functionality in production
 
 ### Phase 4: ✨ Cleanup
@@ -168,7 +169,7 @@ See [COMPONENTS.md](COMPONENTS.md#example-extracting-form-validation) for comple
 
 ## FAQ
 
-**Q: Do I need to move the Flask app?**
+**Q: Do I need to move the application?**
 A: No - it can stay in `apps/`. Moving to `modules/mc/apps/` is recommended for organization.
 
 **Q: How do I deploy this?**

@@ -5,13 +5,13 @@
 **Opperheufd** is a multi-component web presence consisting of:
 
 1. **Static Site** (`site/`) - HTML/CSS landing page with dynamic card-based navigation
-2. **Minecraft Join App** (`apps/minecraft_join_app/`) - Flask web app handling Discord OAuth + Minecraft whitelist via RCON
+2. **Minecraft Join App** (`apps/minecraft_join_app/`) - TypeScript/Node.js (Express) app handling Discord OAuth + Minecraft whitelist via RCON
 
 The codebase uses a flat two-tier structure: shared website frontend + specialized apps.
 
 ## Architecture Patterns
 
-### Flask App Structure (`apps/minecraft_join_app/`)
+### App Structure (TypeScript/Express) (`apps/minecraft_join_app/`)
 
 **Data Persistence**: JSON files (not database)
 - `subscriptions.json` - Core data: Minecraft names mapped to subscription states, payment dates, end dates, active status
@@ -36,21 +36,21 @@ This prevents corruption on crashes. Always follow this pattern for subscription
 
 - **Pending**: User requests whitelist → entry marked `pending=True`, `active=False`. Admin must explicitly activate.
 - **Active**: Admin activates in `/admin` → sets `active=True`, `pending=False`, `end_date` calculated as `payment_date + duration_days`. Only then can RCON be triggered.
-- **RCON Trigger**: When whitelist form submitted AND entry is `active` AND entry is NOT `pending`, execute `whitelist add <mc_name>` via RCON. This happens inline in the POST handler; if RCON fails (host down, auth error), exception bubbles up to Flask error handler.
+-- **RCON Trigger**: When whitelist form submitted AND entry is `active` AND entry is NOT `pending`, execute `whitelist add <mc_name>` via RCON. This happens inline in the request handler; if RCON fails (host down, auth error), the server error handler will return an error response.
 - **Auto-Expire**: `load_subscriptions()` runs on every load, checks if `active=True` AND `end_date < today` (UTC comparison). Auto-flips to `active=False` and logs "auto-expire" action.
 - **Reactivation**: If user re-requests after expiry, `pending=True` flag is set again (awaits admin re-activation).
 
 ## Deployment Context
 
 **Production**: cPanel + Rocky OS VPS
-- Startup file: `passenger_wsgi.py` (WSGI entry point)
-- Python app created in cPanel with venv
+- Startup file: `app.js` (compiled entry) or configured startup command for Node.js apps
+- Node.js app created in cPanel (Setup Node.js App)
 - Environment variables configured in cPanel or `.env` file
 
 **Required Env Vars** (see `DEPLOYMENT.md`):
 - `DISCORD_CLIENT_ID`, `DISCORD_CLIENT_SECRET`, `DISCORD_REDIRECT_URI`, `DISCORD_GUILD_ID`, `DISCORD_BOT_TOKEN`
 - `RCON_HOST`, `RCON_PORT` (default 25575), `RCON_PASSWORD`
-- `ADMIN_PASSWORD`, `FLASK_SECRET_KEY`
+- `ADMIN_PASSWORD`, `SESSION_SECRET`
 
 ### Step-by-Step Deployment (cPanel + Rocky OS)
 
@@ -58,17 +58,17 @@ This prevents corruption on crashes. Always follow this pattern for subscription
    - Point subdomain (e.g., `app.mc.opperheufd.com`) to VPS IP
    - Enable HTTPS via cPanel AutoSSL
 
-2. **Create Python App in cPanel**
-   - Go to "Python" in cPanel
+2. **Create Node.js App in cPanel**
+   - Go to "Setup Node.js App" in cPanel
    - Click "Create Application"
-   - Set application root to `minecraft_join_app/` directory
-   - Set startup file to `passenger_wsgi.py`
-   - Note: cPanel creates venv automatically
+   - Set application root to the `minecraft_join_app/` directory
+   - Set startup file to the compiled entry (`app.js`) or configure the startup command
+   - Note: cPanel will manage the Node.js environment
 
 3. **Install Dependencies**
    - SSH into VPS or use cPanel terminal
    - Navigate to `minecraft_join_app/`
-   - Run: `pip install -r requirements.txt`
+   - Run: `npm install` and `npm run build` (or use cPanel's "Run NPM Install")
 
 4. **Configure Environment Variables**
    - Option A (cPanel): Click app → "Environment Variables" → add each variable
@@ -125,7 +125,7 @@ Always verify `DISCORD_BOT_TOKEN` is set before checking guild membership; the b
 Use `logger.info()` for successful operations (OAuth complete, subscription saved), `logger.warning()` for non-fatal issues (bot token check fails). Logs appear in cPanel error log or console in dev.
 
 ### RCON Failure Handling
-If `RCONClient` connection fails (host unreachable, auth error), exception is NOT caught in `whitelist_submit()`. The Flask error handler will return 500. Consider wrapping in try/except to return user-friendly message.
+If the RCON call fails (host unreachable, auth error), the server's error handler will return 500. Consider wrapping the RCON call to return a user-friendly message and to retry or log the failure.
 
 ### Admin Log as Audit Trail
 Every login attempt (success/fail), subscription change, deletion is logged. Review `admin_log.json` to debug unexpected state (e.g., who activated a subscription at what time from what IP).
@@ -135,19 +135,17 @@ Subscriptions and logs use atomic temp-file writes. If process crashes during wr
 
 ## Common Tasks
 
-- **Add Feature**: Modify `app.py` route, update admin log in action, test via Flask dev server
-- **Fix Subscription Bug**: Check `load_subscriptions()` expiry logic + date parsing in `parse_payment_date()`
+-- **Add Feature**: Modify `src/app.ts` or relevant route in `src/`, update admin log in action, test via `npm run dev`
+-- **Fix Subscription Bug**: Check `load_subscriptions()` expiry logic + date parsing in `src/services/subscriptionService.ts`
 - **Debug RCON**: Verify `RCON_HOST`/port reachable; check logs for connection errors; test locally with `python -m mctools`
 - **Template Changes**: Edit `.html` in `templates/`; rendered with `render_template()` + Jinja2
 
-## Testing Locally
+### Testing Locally
 
 ```bash
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-cp .env.example .env  # Fill Discord/RCON credentials
-python app.py
+cd apps/minecraft_join_app
+npm install
+npm run dev
 ```
 
 Navigate: `http://localhost:5000/join` (Discord OAuth flow) → `/whitelist` → `/admin` (password protected).
@@ -158,17 +156,17 @@ Simple ES6 architecture with client-side templating:
 - **Dynamic Partials**: `index.html` async-fetches `header.txt` + `footer.txt` at load time, injects into `#site-header` / `#site-footer`. Enables site-wide header/footer updates without rebuilding.
 - **Card System**: Loads `cards.json` (array of `{title, description, href}` objects), clones `#card-template`, populates via `buildCard()` helper, renders to `#cards` container. Extensible: add card to JSON, no HTML changes needed.
 - **Styling**: `styles.css` - no framework, minimal (~150 lines). Direct inline styles in templates where needed (e.g., forms in `whitelist.html`).
-- **No Build Step**: All files served directly. Card definitions are JSON; templates are Jinja2 (Flask) or plain HTML.
+-- **Build Step**: TypeScript source compiles to `dist/`; use `npm run build` to compile. Card definitions are JSON; templates are EJS or server templates.
 
-**Adding a New Page**: Create `.html` file in `site/`, link from `cards.json` with `href`, or create new route in Flask app. Static HTML pages load header/footer dynamically via same `loadPartial()` pattern.
+**Adding a New Page**: Create `.html` or EJS template in `site/` or `templates/`, link from `cards.json` with `href`, or create a new route in the Node.js app. Static HTML pages load header/footer dynamically via the same `loadPartial()` pattern.
 
 ## Key Files & Responsibilities
 
 | File | Purpose |
 |------|---------|
-| [apps/minecraft_join_app/app.py](apps/minecraft_join_app/app.py) | All Flask routes, OAuth, RCON, subscriptions logic |
+| [apps/minecraft_join_app/src/app.ts](apps/minecraft_join_app/src/app.ts) | Main Express application and route wiring |
 | [apps/minecraft_join_app/subscriptions.json](apps/minecraft_join_app/subscriptions.json) | Persistent subscription data |
 | [apps/minecraft_join_app/admin_log.json](apps/minecraft_join_app/admin_log.json) | Audit trail |
-| [apps/minecraft_join_app/passenger_wsgi.py](apps/minecraft_join_app/passenger_wsgi.py) | WSGI entry point for cPanel |
+| [apps/minecraft_join_app/package.json](apps/minecraft_join_app/package.json) | Node.js dependencies and scripts |
 | [site/index.html](site/index.html) | Main landing page; loads partials + cards |
 | [site/cards.json](site/cards.json) | Card definitions (title, description, href) |

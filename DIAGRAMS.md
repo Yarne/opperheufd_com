@@ -19,10 +19,10 @@ Visual representations of the modular architecture.
                     |
         ┌───────────┴───────────┐
         |                       |
-   Static Site            Flask App
+    Static Site            Node.js App
   (Info Page)          (Whitelist Mgmt)
         |                       |
-  mc.opperheufd.com      /join /admin
+    mc.opperheufd.com      /join /admin
 ```
 
 ## Data Flow
@@ -83,7 +83,7 @@ Hub Module
 
 Minecraft Module
     └─ No additional dependencies
-       (Static HTML + Flask app handled separately)
+    (Static HTML + Node.js app handled separately)
 ```
 
 ## File Import Flow
@@ -136,8 +136,8 @@ modules/mc/site/index.html (current location)
 ├─ modules/mc/site/  │  ← mc.opperheufd.com doc root
 │  └─ index.html     │
 │                    │
-└─ modules/mc/apps/  │  ← Flask app
-   └─ flask-app/     │     (Python app in cPanel)
+└─ modules/mc/apps/  │  ← Node.js app
+    └─ node-app/      │     (Node.js app in cPanel)
       ├─ app.py      │
       └─ ...         │
 ```

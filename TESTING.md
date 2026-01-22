@@ -16,46 +16,44 @@ Then visit:
 - **Minecraft Site:** http://localhost:8000/modules/mc/site/
 
 ✅ **Pros:** No setup needed, see live changes immediately
-❌ **Cons:** Can't test Flask app, some features limited
+❌ **Cons:** Can't test server-side dynamic features (OAuth/RCON), some features limited
 
-### Method 2: Flask Development Server (If Testing App)
+### Method 2: Node.js Development Server (If Testing App)
 
-For testing the Flask app locally:
+For testing the TypeScript/Node.js app locally:
 
 ```bash
 cd /home/yarne/dev/opperheufd_com/opperheufd_com/apps/minecraft_join_app
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-python app.py
+npm install
+npm run dev
 ```
 
-Visit: http://localhost:5000/
+Visit: http://localhost:5000/ (or the URL output by the dev server)
 
-✅ **Pros:** Full app testing, database changes persist
-❌ **Cons:** Requires setup, only serves Flask app
+✅ **Pros:** Full app testing for the Node.js rewrite
+❌ **Cons:** Requires Node.js and build step for TypeScript
 
 ### Method 3: Docker (Recommended for Full Testing)
 
-Create `docker-compose.yml` at project root:
+Use Docker to run a Node.js container for full testing. Example `docker-compose.yml`:
 
 ```yaml
 version: '3'
 services:
   web:
-    image: python:3.11
+    image: node:18
     volumes:
       - .:/app
-    working_dir: /app
+    working_dir: /app/apps/minecraft_join_app
     ports:
-      - "8000:8000"
-    command: python3 -m http.server 8000 -d modules
+      - "5000:5000"
+    command: sh -c "npm install && npm run dev"
 ```
 
 Then:
 ```bash
 docker-compose up
-# Visit http://localhost:8000/hub/ (Flask not tested)
+# Visit http://localhost:5000/ for the app (or the port exposed by your dev server)
 ```
 
 ## Test Checklist

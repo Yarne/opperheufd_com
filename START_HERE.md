@@ -19,7 +19,7 @@ modules/hub/           → Main hub (opperheufd.com)
 
 modules/mc/            → Minecraft (mc.opperheufd.com)
 ├── site/              → Info page
-└── apps/              → Flask whitelist app
+└── apps/              → Node.js/Express whitelist app
 ```
 
 ### ✅ Comprehensive Documentation

@@ -48,7 +48,7 @@ This document identifies components, utilities, and patterns that are or could b
 ### 🟡 Good Candidates for Shared Library
 
 #### Form Validation
-**Current State:** Inline in Flask templates
+**Current State:** Inline in server templates (EJS/HTML)
 **Usage:** Minecraft whitelist form + future forms
 **Recommendation:** Extract to `shared/scripts/validation.js`
 
@@ -66,7 +66,7 @@ formatValidationError(errors)
 
 #### Message/Notification System
 **Current State:** Inline `.error` and `.success` classes
-**Usage:** Flask app shows errors/success messages
+**Usage:** Application shows errors/success messages
 **Recommendation:** Create `shared/scripts/notify.js` with toast/alert system
 
 ```javascript
@@ -103,7 +103,7 @@ getUTCDate()
 ---
 
 #### Authentication Helpers
-**Current State:** In Flask app (OAuth flow, session checks)
+**Current State:** In the application (OAuth flow, session checks)
 **Usage:** Minecraft Discord OAuth + any future authenticated features
 **Recommendation:** Create `shared/scripts/auth.js` and `shared/scripts/auth-helpers.py` (Python)
 
@@ -132,7 +132,7 @@ check_guild_membership(user_id, guild_id)
 ---
 
 #### API Response Formatting
-**Current State:** In Flask app (JSON responses)
+**Current State:** In the application (JSON responses)
 **Usage:** Any module with API endpoints
 **Recommendation:** Create `shared/scripts/api-response.py` (Python shared utilities)
 
@@ -309,7 +309,7 @@ Given the current codebase, I recommend starting with:
 1. **Form Validation** (`shared/scripts/validation.js`)
    - Extract `MC_NAME_RE` from app.py
    - Create validation functions for common fields
-   - Import in Flask templates via Jinja2 or in browser
+  - Import in server templates or in browser
 
 2. **Message/Notification System** (`shared/scripts/notify.js`)
    - Enhance `.error` and `.success` styling

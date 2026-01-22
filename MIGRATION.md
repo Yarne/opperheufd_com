@@ -6,7 +6,7 @@ This guide explains how to transition from the old flat structure to the new mod
 
 **What exists:**
 - Old site files in `site/` (index.html, cards.json, minecraft.html, styles.css, header.txt, footer.txt)
-- Flask app in `apps/minecraft_join_app/`
+- Application in `apps/minecraft_join_app/`
 - Both serve from root domain
 
 ## Phase 2: New Modular Structure
@@ -19,9 +19,9 @@ This guide explains how to transition from the old flat structure to the new mod
 
 ## Implementation Steps
 
-### Step 1: Move Flask App (Optional but Recommended)
+### Step 1: Move Application (Optional but Recommended)
 
-The Flask app doesn't need to move from `apps/minecraft_join_app/` for it to work, but moving it to `modules/mc/apps/minecraft_join_app/` keeps everything organized.
+The app doesn't need to move from `apps/minecraft_join_app/` to work, but moving it to `modules/mc/apps/minecraft_join_app/` keeps the repository organized.
 
 ```bash
 # Backup
@@ -33,18 +33,17 @@ mkdir -p modules/mc/apps
 # Copy to new location
 cp -r apps/minecraft_join_app modules/mc/apps/
 
-# Update routes if referencing old paths
-# (Usually only needed if loading templates from shared location)
+# Update paths if necessary (templates or static asset paths)
 ```
 
-### Step 2: Update HTML Templates (Flask App)
+### Step 2: Update HTML Templates (Server-side or EJS)
 
-If moving the Flask app or want to use shared components, update templates:
+If moving the app or using shared components, update server-rendered templates to include shared styles and partials.
 
 **Old approach:** Inline styles
-**New approach:** Use shared stylesheet
+**New approach:** Use shared stylesheet and partials loader
 
-Update `apps/minecraft_join_app/templates/whitelist.html`:
+Update your template (EJS or server templates) to include shared resources, for example:
 
 ```html
 <!doctype html>
@@ -59,15 +58,10 @@ Update `apps/minecraft_join_app/templates/whitelist.html`:
   </head>
   <body>
     <div id="site-header"></div>
-    
+
     <main>
       <h1>Whitelist Access</h1>
-      {% if error %}
-        <p class="error">{{ error }}</p>
-      {% endif %}
-      {% if success %}
-        <p class="success">{{ success }}</p>
-      {% endif %}
+      <!-- Render server messages or client-side messages here -->
       <form method="post" action="/whitelist">
         <label for="mc_name">Minecraft name</label>
         <input id="mc_name" name="mc_name" required />
@@ -76,14 +70,12 @@ Update `apps/minecraft_join_app/templates/whitelist.html`:
     </main>
 
     <div id="site-footer"></div>
-    
+
     <!-- Shared scripts -->
     <script src="/shared/scripts/partials.js"></script>
     <script>
-      const headerPath = '/shared/components/header.html';
-      const footerPath = '/shared/components/footer.html';
-      loadPartial("site-header", headerPath);
-      loadPartial("site-footer", footerPath);
+      loadPartial("site-header", "/shared/components/header.html");
+      loadPartial("site-footer", "/shared/components/footer.html");
     </script>
   </body>
 </html>
@@ -100,7 +92,7 @@ Keep `apps/` and new modular structure on same server:
 ├── shared/           # Accessible to all
 ├── modules/hub/      # opperheufd.com root
 ├── modules/mc/site/  # mc.opperheufd.com root
-└── apps/            # Flask runs here, or in modules/mc/apps/
+└── apps/              # application code (Node.js) lives here or in modules/mc/apps/
 ```
 
 **Option B: New Modular Setup**
@@ -135,10 +127,10 @@ Organize everything under modules:
 2. Set document root to `/public_html/modules/mc/site/`
 3. Ensure `shared/` is accessible
 
-**Flask app:**
-1. Create Python app in cPanel for same domain
+**Node.js app:**
+1. Create Node.js app in cPanel for the same domain (or use your Node host)
 2. Set application root to `/public_html/modules/mc/apps/minecraft_join_app/`
-3. Set startup file to `passenger_wsgi.py`
+3. Set startup file to the compiled entry (e.g. `app.js`) or use the provided startup command
 
 ### Step 5: Testing
 
@@ -190,9 +182,9 @@ rm old_docs.md
 <link rel="stylesheet" href="../../../shared/styles/base.css" />
 ```
 
-### Absolute Paths in Flask Templates
+### Absolute Paths in Server Templates
 
-If using Flask, use absolute paths (starting with `/`):
+When using server-rendered templates, prefer absolute paths (starting with `/`) for shared resources:
 
 ```html
 <link rel="stylesheet" href="/shared/styles/base.css" />
@@ -228,12 +220,12 @@ Then ensure your web server serves `shared/` from root:
 3. Check browser console for JavaScript errors
 4. Verify component files exist: `ls shared/components/`
 
-### Flask App 404s
+### Application 404s
 
 **Symptoms:** App works but links 404
 
 **Solutions:**
-1. Update FLASK_SECRET_KEY and environment variables
+1. Update `SESSION_SECRET` and environment variables.
 2. Verify startup file points to correct location
 3. Check cPanel Python app settings
 4. Review app.py for hard-coded paths
