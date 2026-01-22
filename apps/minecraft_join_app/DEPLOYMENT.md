@@ -76,7 +76,7 @@ npm run build
 2. Click **Environment Variables**
 3. Add each variable (see `.env.example` for the list):
    - `NODE_ENV=production`
-   - `FLASK_SECRET_KEY=<your-secret-key>`
+   - `SESSION_SECRET=<your-secret-key>`
    - `DISCORD_CLIENT_ID=<from-step-2>`
    - `DISCORD_CLIENT_SECRET=<from-step-2>`
    - `DISCORD_REDIRECT_URI=https://app.mc.opperheufd.com/oauth/callback`
@@ -150,7 +150,7 @@ Check application logs via cPanel for any startup errors.
 
 ### Session/login issues
 
-- Verify `FLASK_SECRET_KEY` is set to a long random string
+ - Verify `SESSION_SECRET` is set to a long random string
 - Check browser cookies are enabled
 - Clear browser cache and cookies, retry login
 

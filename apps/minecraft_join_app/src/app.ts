@@ -3,6 +3,7 @@ import session from "express-session";
 import path from "path";
 import { fileURLToPath } from "url";
 import dotenv from "dotenv";
+import ejs from "ejs";
 import {
   loadSubscriptions,
   saveSubscriptions,
@@ -26,7 +27,8 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.set("view engine", "ejs");
+app.engine("html", ejs.renderFile);
+app.set("view engine", "html");
 app.set("views", path.join(__dirname, "../templates"));
 
 app.use(express.urlencoded({ extended: true }));
@@ -34,7 +36,7 @@ app.use(express.static(path.join(__dirname, "../public")));
 
 app.use(
   session({
-    secret: process.env.FLASK_SECRET_KEY || "change-me",
+    secret: process.env.SESSION_SECRET || "change-me",
     resave: false,
     saveUninitialized: false,
     cookie: { secure: process.env.NODE_ENV === "production", httpOnly: true },
