@@ -41,12 +41,12 @@
   </head>
   <body>
     <h1>Whitelist Access</h1>
-    {% if error %}
-      <p class="error">{{ error }}</p>
-    {% endif %}
-    {% if success %}
-      <p class="success">{{ success }}</p>
-    {% endif %}
+    <% if (error) { %>
+      <p class="error"><%= error %></p>
+    <% } %>
+    <% if (success) { %>
+      <p class="success"><%= success %></p>
+    <% } %>
     <form method="post" action="/whitelist">
       <label for="mc_name">Minecraft name</label>
       <input id="mc_name" name="mc_name" required />

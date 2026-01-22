@@ -1,0 +1,27 @@
+{
+  "name": "minecraft-join-app",
+  "version": "1.0.0",
+  "description": "Minecraft whitelist join app with Discord OAuth",
+  "main": "dist/app.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/app.js",
+    "dev": "tsx watch src/app.ts",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "axios": "^1.6.0",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/express-session": "^1.17.10",
+    "@types/node": "^20.10.6",
+    "@types/ejs": "^3.1.5",
+    "typescript": "^5.3.3",
+    "tsx": "^4.7.0"
+  }
+}

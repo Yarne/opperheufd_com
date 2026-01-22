@@ -1,6 +1,0 @@
-Flask
-Authlib
-python-dotenv
-mcrcon
-requests
-mctools

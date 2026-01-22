@@ -21,11 +21,11 @@
     <div class="card">
       <h1>All set!</h1>
       <p>
-        {% if mc_name %}
-          {{ mc_name }} is now whitelisted.
-        {% else %}
+        <% if (mc_name) { %>
+          <%= mc_name %> is now whitelisted.
+        <% } else { %>
           You are now whitelisted.
-        {% endif %}
+        <% } %>
       </p>
       <p>
         Connect to <strong>ip.mc.opperheufd.com</strong> in Minecraft.

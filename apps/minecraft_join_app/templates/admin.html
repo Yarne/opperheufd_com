@@ -108,29 +108,29 @@
     <div class="shell">
       <div class="card">
         <h1>Subscription Admin</h1>
-        {% if error %}
-          <p class="error">{{ error }}</p>
-        {% endif %}
-        {% if success %}
-          <p class="success">{{ success }}</p>
-        {% endif %}
+        <% if (error) { %>
+          <p class="error"><%= error %></p>
+        <% } %>
+        <% if (success) { %>
+          <p class="success"><%= success %></p>
+        <% } %>
 
-        {% if not is_admin %}
+        <% if (!is_admin) { %>
           <form method="post" action="/admin/login">
             <label for="password">Admin password</label>
             <input id="password" name="password" type="password" required />
             <button type="submit">Sign in</button>
           </form>
-        {% else %}
+        <% } else { %>
           <form method="post" action="/admin/logout">
             <button class="secondary" type="submit">Sign out</button>
           </form>
-        {% endif %}
+        <% } %>
       </div>
 
-      {% if is_admin %}
-        {% set pending_list = subscriptions|selectattr('pending')|list %}
-        {% set active_list = subscriptions|rejectattr('pending')|list %}
+      <% if (is_admin) { %>
+        <% const pending_list = subscriptions.filter(s => s.pending); %>
+        <% const active_list = subscriptions.filter(s => !s.pending); %>
         <div class="card">
           <h2>Add or update a subscription</h2>
           <form method="post" action="/admin/subscription">
@@ -141,7 +141,7 @@
               </div>
               <div>
                 <label for="payment_date">Payment date</label>
-                <input id="payment_date" name="payment_date" type="date" value="{{ today }}" required />
+                <input id="payment_date" name="payment_date" type="date" value="<%= today %>" required />
               </div>
               <div>
                 <label for="duration_days">Duration (days)</label>
@@ -158,7 +158,7 @@
 
         <div class="card">
           <h2>Pending requests</h2>
-          {% if pending_list %}
+          <% if (pending_list.length > 0) { %>
             <table>
               <thead>
                 <tr>
@@ -169,41 +169,41 @@
                 </tr>
               </thead>
               <tbody>
-                {% for entry in pending_list %}
+                <% pending_list.forEach(entry => { %>
                   <tr>
-                    <td>{{ entry.mc_name }}</td>
-                    <td>{{ entry.requested_at or "-" }}</td>
+                    <td><%= entry.mc_name %></td>
+                    <td><%= entry.requested_at || "-" %></td>
                     <td><span class="pill pending">Pending</span></td>
                     <td class="actions">
                       <button
                         class="secondary"
                         type="button"
                         data-edit
-                        data-mc-name="{{ entry.mc_name }}"
-                        data-payment-date="{{ entry.payment_date or '' }}"
-                        data-duration-days="{{ entry.duration_days if entry.duration_days else '' }}"
-                        data-active="{{ 'true' if entry.active else 'false' }}"
+                        data-mc-name="<%= entry.mc_name %>"
+                        data-payment-date="<%= entry.payment_date || '' %>"
+                        data-duration-days="<%= entry.duration_days || '' %>"
+                        data-active="<%= entry.active ? 'true' : 'false' %>"
                       >
                         Activate
                       </button>
-                      <form method="post" action="/admin/subscription/{{ entry.mc_name }}/delete">
+                      <form method="post" action="/admin/subscription/<%= entry.mc_name %>/delete">
                         <button class="secondary" type="submit">Delete</button>
                       </form>
                     </td>
                   </tr>
-                {% endfor %}
+                <% }); %>
               </tbody>
             </table>
-          {% else %}
+          <% } else { %>
             <p>No pending requests.</p>
-          {% endif %}
+          <% } %>
         </div>
 
         <div class="card">
           <h2>Current subscriptions</h2>
           <label for="search">Search</label>
           <input id="search" type="text" placeholder="Search by Minecraft name" />
-          {% if active_list %}
+          <% if (active_list.length > 0) { %>
             <table>
               <thead>
                 <tr>
@@ -216,53 +216,53 @@
                 </tr>
               </thead>
               <tbody>
-                {% for entry in active_list %}
+                <% active_list.forEach(entry => { %>
                   <tr>
-                    <td>{{ entry.mc_name }}</td>
-                    <td>{{ entry.payment_date or "-" }}</td>
-                    <td>{{ entry.end_date or "-" }}</td>
+                    <td><%= entry.mc_name %></td>
+                    <td><%= entry.payment_date || "-" %></td>
+                    <td><%= entry.end_date || "-" %></td>
                     <td>
-                      {% if entry.duration_days %}
-                        {{ entry.duration_days }} days
-                      {% else %}
+                      <% if (entry.duration_days) { %>
+                        <%= entry.duration_days %> days
+                      <% } else { %>
                         -
-                      {% endif %}
+                      <% } %>
                     </td>
                     <td>
-                      {% if entry.active %}
+                      <% if (entry.active) { %>
                         <span class="pill active">Active</span>
-                      {% else %}
+                      <% } else { %>
                         <span class="pill inactive">Inactive</span>
-                      {% endif %}
+                      <% } %>
                     </td>
                     <td class="actions">
                       <button
                         class="secondary"
                         type="button"
                         data-edit
-                        data-mc-name="{{ entry.mc_name }}"
-                        data-payment-date="{{ entry.payment_date or '' }}"
-                        data-duration-days="{{ entry.duration_days if entry.duration_days else '' }}"
-                        data-active="{{ 'true' if entry.active else 'false' }}"
+                        data-mc-name="<%= entry.mc_name %>"
+                        data-payment-date="<%= entry.payment_date || '' %>"
+                        data-duration-days="<%= entry.duration_days || '' %>"
+                        data-active="<%= entry.active ? 'true' : 'false' %>"
                       >
                         Edit
                       </button>
-                      <form method="post" action="/admin/subscription/{{ entry.mc_name }}/delete">
+                      <form method="post" action="/admin/subscription/<%= entry.mc_name %>/delete">
                         <button class="secondary" type="submit">Delete</button>
                       </form>
                     </td>
                   </tr>
-                {% endfor %}
+                <% }); %>
               </tbody>
             </table>
-          {% else %}
+          <% } else { %>
             <p>No subscriptions yet.</p>
-          {% endif %}
+          <% } %>
         </div>
 
         <div class="card">
           <h2>Audit log</h2>
-          {% if log_entries %}
+          <% if (log_entries.length > 0) { %>
             <table>
               <thead>
                 <tr>
@@ -273,21 +273,21 @@
                 </tr>
               </thead>
               <tbody>
-                {% for entry in log_entries %}
+                <% log_entries.forEach(entry => { %>
                   <tr>
-                    <td>{{ entry.timestamp }}</td>
-                    <td>{{ entry.action }}</td>
-                    <td>{{ entry.details }}</td>
-                    <td>{{ entry.ip }}</td>
+                    <td><%= entry.timestamp %></td>
+                    <td><%= entry.action %></td>
+                    <td><%= JSON.stringify(entry.details) %></td>
+                    <td><%= entry.ip %></td>
                   </tr>
-                {% endfor %}
+                <% }); %>
               </tbody>
             </table>
-          {% else %}
+          <% } else { %>
             <p>No log entries yet.</p>
-          {% endif %}
+          <% } %>
         </div>
-      {% endif %}
+      <% } %>
     </div>
     <script>
       const searchInput = document.querySelector("#search");

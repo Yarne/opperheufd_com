@@ -1,31 +1,96 @@
-# Minecraft Join App (Flask)
+# Minecraft Join App
 
-This app handles Discord login and whitelisting via RCON.
+**TypeScript/Express.js Edition**: Now running on Node.js for better cPanel compatibility.
 
-## Local setup
+## Quick Links
 
-1. `python3 -m venv venv`
-2. `source venv/bin/activate`
-3. `pip install -r requirements.txt`
-4. `cp .env.example .env` and fill values
-5. `python app.py`
+- **Getting Started**: [QUICKSTART.md](./QUICKSTART.md) - Get running in 5 minutes
+- **cPanel Deployment**: [DEPLOYMENT.md](./DEPLOYMENT.md) - Production setup
+- **Migration Guide**: [MIGRATION.md](./MIGRATION.md) - Details about the Flask → Node.js rewrite
 
-## cPanel setup (Rocky OS)
+## What This App Does
 
-1. Create a Python app in cPanel.
-2. Set the application root to the `join_app` folder.
-3. Set the application startup file to `passenger_wsgi.py`.
-4. Create a virtual environment in cPanel and install dependencies:
-   - `pip install -r requirements.txt`
-5. Add environment variables in cPanel (or upload a `.env` file).
+- 🔐 Discord OAuth authentication
+- ✅ Minecraft whitelist via RCON
+- 📊 Subscription management (JSON-based)
+- 🛡️ Admin panel with audit logging
+- ⚡ Auto-expiring subscriptions
 
-## Discord OAuth notes
+## Get Started
 
-- Use the redirect URI you set in the Discord developer portal.
-- The user must be in your Discord server (guild) to continue.
-- Optional: set `DISCORD_BOT_TOKEN` to verify guild membership via the bot API.
+### Local Development
 
-## RCON notes
+```bash
+npm install
+npm run build
+cp .env.example .env
+# Edit .env with your Discord/RCON credentials
+npm run dev
+```
 
-- `RCON_HOST` should be reachable from the VPS.
-- Ensure the RCON port is open on the Minecraft server.
+Visit `http://localhost:5000/join`
+
+### Production (cPanel)
+
+1. Create Node.js app in cPanel (v18+)
+2. Set startup file to `app.js`
+3. Install dependencies: `npm install`
+4. Build: `npm run build`
+5. Set environment variables in cPanel
+6. Restart application
+
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed instructions.
+
+## Why TypeScript?
+
+Your provider doesn't support Python apps. TypeScript/Node.js:
+- Runs on any cPanel with Node.js support (more common than Python)
+- Uses same data files (no migration needed)
+- Maintains 100% feature compatibility
+- Better concurrent request handling
+
+## File Structure
+
+```
+src/          - TypeScript source
+templates/    - EJS HTML templates
+dist/         - Compiled JavaScript (generated)
+package.json  - Dependencies
+tsconfig.json - TypeScript config
+```
+
+## Key Files
+
+- [src/app.ts](./src/app.ts) - Main Express application
+- [src/services/](./src/services/) - Business logic (OAuth, RCON, subscriptions)
+- [templates/](./templates/) - HTML templates (EJS)
+- [.env.example](./.env.example) - Environment variables template
+
+## Documentation by Topic
+
+| Topic | Link |
+|-------|------|
+| Quick setup | [QUICKSTART.md](./QUICKSTART.md) |
+| cPanel deployment | [DEPLOYMENT.md](./DEPLOYMENT.md) |
+| Rewrite details | [MIGRATION.md](./MIGRATION.md) |
+
+## Support
+
+- **Deployment help**: See [DEPLOYMENT_NODEJS.md](./DEPLOYMENT_NODEJS.md)
+- **Feature questions**: See [README_TYPESCRIPT.md](./README_TYPESCRIPT.md)
+- **cPanel issues**: Contact your hosting provider for Node.js support
+- **Discord/RCON**: Verify credentials and connectivity
+
+## Data Files
+
+Both Flask and Node.js versions use the same JSON format:
+
+- `subscriptions.json` - User subscriptions and status
+- `admin_log.json` - Audit trail of all actions
+
+No conversion needed when upgrading. Old data works as-is.
+
+---
+
+**Made with ❤️ for Minecraft server management**
+
