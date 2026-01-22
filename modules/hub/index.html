@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Opperheufd - Hub</title>
+    <link rel="stylesheet" href="../../shared/styles/base.css" />
+    <link rel="stylesheet" href="../../shared/styles/components.css" />
+  </head>
+  <body>
+    <div id="site-header"></div>
+
+    <main>
+      <section>
+        <h2>Projects</h2>
+        <div class="cards" id="cards"></div>
+        <template id="card-template">
+          <article class="card">
+            <h3 class="card-title"></h3>
+            <p class="card-description"></p>
+          </article>
+        </template>
+      </section>
+    </main>
+
+    <div id="site-footer"></div>
+    
+    <script src="../../shared/scripts/partials.js"></script>
+    <script src="../../shared/scripts/cards.js"></script>
+    <script>
+      loadPartial("site-header", "../../shared/components/header.html");
+      loadPartial("site-footer", "../../shared/components/footer.html");
+      loadAndRenderCards("cards.json");
+    </script>
+  </body>
+</html>

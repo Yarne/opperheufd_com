@@ -1,7 +1,0 @@
-<header>
-  <h1>Opperheufd</h1>
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="minecraft.html">Minecraft Server</a>
-  </nav>
-</header>
