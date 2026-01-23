@@ -5,7 +5,7 @@
   "main": "dist/app.js",
   "type": "module",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && node scripts/fix-imports.cjs",
     "start": "node dist/app.js",
     "dev": "tsx watch src/app.ts",
     "smoke": "node --input-type=module scripts/smoke.cjs",

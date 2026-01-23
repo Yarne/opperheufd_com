@@ -3,7 +3,6 @@ import session from "express-session";
 import path from "path";
 import { fileURLToPath } from "url";
 import dotenv from "dotenv";
-import ejs from "ejs";
 import {
   loadSubscriptions,
   saveSubscriptions,
@@ -27,8 +26,7 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.engine("html", ejs.renderFile);
-app.set("view engine", "html");
+app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "../templates"));
 
 app.use(express.urlencoded({ extended: true }));
