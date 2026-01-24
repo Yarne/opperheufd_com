@@ -1,17 +1,41 @@
 /* Reset-lite */
+
+/* ==================================================
+   1. Reset / Base
+   ================================================== */
+
+:root {
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  
+  --max-width: 800px;
+  --radius: 10px;
+
+  --font: system-ui, -apple-system, sans-serif;
+}
+
 * {
     box-sizing: border-box;
 }
 
 body {
     margin: 0;
-    font-family: system-ui, -apple-system, sans-serif;
+    font-family: var(--font);
+    background-color: rgb(51, 51, 51);
+    color: mediumturquoise;
 }
 
+/* ==================================================
+   2. Layout
+   ================================================== */
+
 header, main, footer {
-    max-width: 800px;
+    max-width: var(--max-width);
     margin: auto;
-    padding: 1rem;
+    padding: var(--space-md);
 }
 
 header {
@@ -20,8 +44,35 @@ header {
     align-items: center;
 }
 
+footer {
+    text-align: right;
+    font-size: 0.875rem;
+    color: #666;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+    text-align: center;
+}
+
+section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+/* ==================================================
+   3. Components
+   ================================================== */
+
+nav {
+    display: flex;
+    gap: var(--space-lg);
+}
+
 nav a {
-    margin-left: 1rem;
     text-decoration: none;
     color: inherit;
 }
@@ -29,3 +80,32 @@ nav a {
 nav a:hover {
     text-decoration: underline;
 }
+
+.project {
+    padding: var(--space-md);
+    border-radius: var(--radius);
+    text-align: left;
+    background-color: darkslateblue;
+    border: mediumvioletred 3px solid;
+    color: lightgreen;
+    a:visited {
+        color: lightcoral;
+    }
+}
+
+.project[data-type="minecraft"] {
+    background-color: mediumseagreen;
+    border: brown 3px solid;
+    color: yellow;
+    a:visited {
+        color: mediumvioletred;
+    }
+}
+
+a:visited {
+    color: mediumspringgreen;
+}
+
+/* ==================================================
+   4. Page-specific / Overrides
+   ================================================== */
