@@ -50,6 +50,11 @@ footer {
     color: #666;
 }
 
+nav {
+    display: flex;
+    gap: var(--space-lg);
+}
+
 main {
     display: flex;
     flex-direction: column;
@@ -66,11 +71,6 @@ section {
 /* ==================================================
    3. Components
    ================================================== */
-
-nav {
-    display: flex;
-    gap: var(--space-lg);
-}
 
 nav a {
     text-decoration: none;
