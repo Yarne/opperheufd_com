@@ -21,16 +21,18 @@
   --font-size-md: 1rem;
   --font-size-lg: 1.25rem;
   --font-size-xl: 1.5rem;
-
-  --title: 'Opperheufd';
 }
 
 * {
     box-sizing: border-box;
 }
 
-body {
+html, body {
+    height: 100%;
     margin: 0;
+}
+
+body {
     font-family: var(--font);
     background-color: darkslategray;
     color: mediumturquoise;
@@ -55,7 +57,7 @@ header {
 footer {
     text-align: right;
     font-size: var(--font-size-sm);
-    color: #666;
+    color: #ff0095;
 }
 
 nav {
@@ -86,7 +88,7 @@ nav a {
 }
 
 nav a:hover {
-    text-decoration: underline;
+    text-decoration: wavy underline;
 }
 
 .project {
