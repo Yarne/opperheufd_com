@@ -5,22 +5,41 @@
    ================================================== */
 
 :root {
-  --space-xs: 0.25rem;
-  --space-sm: 0.5rem;
-  --space-md: 1rem;
-  --space-lg: 1.5rem;
-  --space-xl: 2rem;
-  
-  --max-width: 800px;
-  --radius: 10px;
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
 
-  --font: system-ui, -apple-system, sans-serif;
+    --max-width: 800px;
+    --radius: 10px;
 
-  --font-size-base: 16px;
-  --font-size-sm: 0.875rem;
-  --font-size-md: 1rem;
-  --font-size-lg: 1.25rem;
-  --font-size-xl: 1.5rem;
+    --font: system-ui, -apple-system, sans-serif;
+
+    --font-size-base: 16px;
+    --font-size-sm: 0.875rem;
+    --font-size-md: 1rem;
+    --font-size-lg: 1.25rem;
+    --font-size-xl: 1.5rem;
+
+    --color-neutral-10: oklch(0.15 0 0);
+    --color-neutral-20: oklch(0.2 0 0);
+    --color-neutral-30: oklch(0.3 0 0);
+    --color-neutral-40: oklch(0.4 0 0);
+    --color-neutral-50: oklch(0.5 0 0);
+    --color-neutral-60: oklch(0.6 0 0);
+    --color-neutral-70: oklch(0.7 0 0);
+    --color-neutral-80: oklch(0.8 0 0);
+    --color-neutral-90: oklch(0.9 0 0);
+
+    --color-text-title: oklch(0.74 0.15 240);
+    --color-text-main: white;
+    --color-text-accent: oklch(0.74 0.15 10);
+
+    --color-bg: var(--color-neutral-40);
+    --color-text: var(--color-text-main);
+    --color-text-secondary: var(--color-neutral-80);
+
 }
 
 * {
@@ -34,8 +53,8 @@ html, body {
 
 body {
     font-family: var(--font);
-    background-color: darkslategray;
-    color: mediumturquoise;
+    background-color: var(--color-bg);
+    color: var(--color-text);
 }
 
 /* ==================================================
@@ -52,12 +71,13 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    color: var(--color-text-title)
 }
 
 footer {
     text-align: right;
     font-size: var(--font-size-sm);
-    color: #ff0095;
+    color: var(--color-text-accent);
 }
 
 nav {
@@ -76,6 +96,10 @@ section {
     display: flex;
     flex-direction: column;
     gap: var(--space-lg);
+    background-color: var(--color-neutral-50);
+    border-radius: var(--radius);
+    box-shadow: 0px 0px 10px var(--color-neutral-20);
+    padding: var(--space-xl);
 }
 
 /* ==================================================
@@ -92,23 +116,22 @@ nav a:hover {
 }
 
 .project {
+    max-width: 700px;
+    min-width: 700px;
+    margin: auto;
     padding: var(--space-md);
     border-radius: var(--radius);
     text-align: left;
-    background-color: darkslateblue;
-    border: mediumvioletred 3px solid;
-    color: lightgreen;
-    a:link {
-        color: lightyellow;
-    }
-    a:visited {
-        color: lightcoral;
+    background-color: var(--color-neutral-60);
+    box-shadow: inset 0 0 10px var(--color-neutral-10);
+    h3 {
+        margin-top: 0;
+        color: var(--color-text-title);
     }
 }
 
 .project[data-type="minecraft"] {
     background-color: mediumseagreen;
-    border: brown 3px solid;
     color: yellow;
     a:visited {
         color: mediumvioletred;
@@ -118,12 +141,16 @@ nav a:hover {
 .card {
     padding: var(--space-md);
     border-radius: var(--radius);
-    background-color: teal;
+    background-color: var(--color-neutral-60);
     border: darkcyan 2px solid;
 }
 
+a:link {
+    color: var(--color-text-accent);
+}
+
 a:visited {
-    color: mediumspringgreen;
+    color: var(--color-text-secondary);
 }
 
 /* ==================================================
