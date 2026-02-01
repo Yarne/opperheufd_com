@@ -24,7 +24,7 @@
         h3 {
             margin: 0;
             font-size: var(--font-size-lg);
-            color: var(--color-text-title);
+            color: var(--color-text-dark);
         }
     }
     h4 {
@@ -35,7 +35,7 @@
 
 .cv-meta {
     font-size: var(--font-size-md);
-    color: lightgray;
+    color: var(--color-neutral-90);
 }
 
 .cv-sub {
